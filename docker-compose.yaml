@@ -1,0 +1,46 @@
+version: '3'
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    # networks:
+    #   - redis-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27018:27018"
+    # networks:
+    #   - mongo-network
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: your-mongodb-username
+    #   MONGO_INITDB_ROOT_PASSWORD: your-mongodb-password
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5433:5433"
+    # networks:
+    #   - postgres-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres-redis
+
+#   nodejs-app:
+#     build:
+#       context: ./
+#     depends_on:
+#       - redis
+#       - mongodb
+#       - postgres
+#     networks:
+#       - redis-network
+#       - mongo-network
+#       - postgres-network
+
+# networks:
+#   redis-network:
+#   mongo-network:
+#   postgres-network:
