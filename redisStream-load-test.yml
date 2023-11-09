@@ -1,0 +1,32 @@
+config:
+  target: "http://localhost:3000/"
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 5
+      name: Warm up phase
+
+  plugins:
+    ensure: {}
+    apdex: {}
+  apdex:
+    threshold: 100
+  ensure:
+    thresholds:
+      - http.response_time.p99: 100  #99% of the responses should be faster than this threshold.
+      - http.response_time.p95: 75  #95% of responses should be faster than this threshold.
+
+#  A scenario is usually a sequence of steps that describes a user session in the app.
+
+scenarios:
+  - flow:
+      - post:
+          url: "/produce"
+          json:
+            message: "hi arpita"
+      - loop:
+        - post:
+            url: "/produce"
+            json:
+                message: "hi arpita"
+        count: 10
