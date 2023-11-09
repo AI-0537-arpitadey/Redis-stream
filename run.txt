@@ -1,0 +1,7 @@
+1. docker compose up --build
+
+2. node producer.js
+
+3. node mongoconnect.js
+
+4. To test: artillery run redisStream-load-test.yml 
