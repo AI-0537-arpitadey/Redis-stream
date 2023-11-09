@@ -13,11 +13,11 @@ const MessageModel = mongoose.model('Message', messageSchema);
 // Set up Redis connection
 const redis = new Redis({
   host: '127.0.0.1', // Set your Redis host here
-  port: 6379, // Set your Redis port here
+  port: 6389, // Set your Redis port here
 });
 
 // Set up MongoDB connection using Mongoose
-mongoose.connect('mongodb://192.168.112.2:27017/redis', { useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27019/redis', { useUnifiedTopology: true });
 const mongoDB = mongoose.connection;
 
 mongoDB.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -48,12 +48,15 @@ async function sendMsgToMongo(givenMsg) {
 
 async function main() {
   const streamName = 'redis-test1';
-  const consumerGroup = cuid();
+  const consumerGroup = "cg1" //cuid();
   const consumerName = 'consumer1';
 
   // Create a consumer group if it doesn't exist
-
-  await redis.xgroup('CREATE', streamName, consumerGroup, '0', 'MKSTREAM');
+  try {
+    await redis.xgroup('CREATE', streamName, consumerGroup, '0', 'MKSTREAM');
+  } catch (error) {
+    console.log("NON FATAL ==> ")
+  }
 
   try {
     while (true) {
@@ -70,12 +73,10 @@ async function main() {
         '>'
       );
 
-      console.log("resp ==> ", resp)
-      const [[_, [messageId, message]]] = resp
+      console.log("resp ==> ", JSON.stringify(resp))
+      const [[_, [[messageId, [__, givenMsg]]]]] = resp
 
-      console.log(" ==> ", messageId, message)
-
-      const givenMsg = messageId[1][1]; 
+      console.log(" ==> ", messageId, givenMsg)
 
       await sendMsgToMongo(givenMsg);
 
@@ -84,7 +85,7 @@ async function main() {
     }
   } catch (error) {
     console.error('Error:', error);
-    process.exit(1);
+    // process.exit(1);
   }
 }
 

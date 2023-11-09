@@ -3,24 +3,24 @@ services:
   redis:
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "6389:6379"
     # networks:
     #   - redis-network
 
   mongodb:
     image: mongo:latest
     ports:
-      - "27018:27018"
+      - "27019:27017"
     # networks:
     #   - mongo-network
     # environment:
     #   MONGO_INITDB_ROOT_USERNAME: your-mongodb-username
     #   MONGO_INITDB_ROOT_PASSWORD: your-mongodb-password
 
-  postgres:
-    image: postgres:latest
-    ports:
-      - "5433:5433"
+  # postgres:
+  #   image: postgres:latest
+  #   ports:
+  #     - "5433:5433"
     # networks:
     #   - postgres-network
     environment:

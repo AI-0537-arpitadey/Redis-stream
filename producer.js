@@ -6,7 +6,7 @@ const port = 3000;
 
 const redis = new Redis({
   host: "127.0.0.1", // Set your Redis host here
-  port: 6379, // Set your Redis port here
+  port: 6389, // Set your Redis port here
 });
 
 app.use(express.json());
